@@ -16,69 +16,61 @@ end
 
 # define kq
 def r(mark)
-    kq = {
-        '>' => 'ﾀﾞｧｲｪｽ',
-        '<' => 'ｲｪｽﾀﾞｧ',
-        '+' => 'ﾀﾞｧﾀﾞｧ',
-        '-' => 'ｼｴﾘｼｴﾘ',
-        ',' => 'ﾀﾞｧｼｴﾘ',
-        '.' => 'ｼｴﾘﾀﾞｧ', # print
-        '[' => 'ｼｴﾘｲｪｽ',
-        ']' => 'ｲｪｽｼｴﾘ',
-    }
-    sep = '!' * (rand(2) + 1)
-    kq[mark] + sep 
+  kq = {
+    '>' => 'ﾀﾞｧｲｪｽ',
+    '<' => 'ｲｪｽﾀﾞｧ',
+    '+' => 'ﾀﾞｧﾀﾞｧ',
+    '-' => 'ｼｴﾘｼｴﾘ',
+    ',' => 'ﾀﾞｧｼｴﾘ',
+    '.' => 'ｼｴﾘﾀﾞｧ', # print
+    '[' => 'ｼｴﾘｲｪｽ',
+    ']' => 'ｲｪｽｼｴﾘ',
+  }
+  sep = '!' * (rand(2) + 1)
+  kq[mark] + sep 
 end
 
 # local
 def local(buffer)
-    res = ''
-    len = buffer.length
-    exit if len < 1
-    0.upto(len-1) {|i|
-        0.upto(buffer[i] - 1) { res += r('+') }
-        res += r('.')
-        res += r('>') if i < (len - 1)
-    }
-    return res
+  exit if buffer.size < 1
+  buffer.map{|elem| (r('+')*elem) + r('.')}.join(r('>'))
 end
 
 # express
 def express(buffer)
-    res = ''
-    len = buffer.length
-    exit if len < 1
-    0.upto(buffer[0] - 1) { res += r('+') }
+  res = ''
+  len = buffer.length
+  exit if len < 1
+  0.upto(buffer[0] - 1) { res += r('+') }
+  res += r('.')
+  return res if len < 2
+  1.upto(len-1) {|i|
+    diff = buffer[i] - buffer[i-1]
+    (0 < diff) ? diff.downto(1) { res += r('+') } : diff.abs.downto(1) { res += r('-') }
     res += r('.')
-    return res if len < 2
-    1.upto(len-1) {|i|
-        diff = buffer[i] - buffer[i-1]
-        (0 < diff) ? diff.downto(1) { res += r('+') } : diff.abs.downto(1) { res += r('-') }
-        res += r('.')
-    }
-    return res
+  }
+  return res
 end
 
 
 # limited_express
 """ just idea now implementing
 def limited_express(buffer)
-    res = ''
-    len = buffer.length
-    exit if len < 1
-    half = buffer[0] / 2
-    res += r('+')  if buffer[0] % 2
-    res += r('>') + r('[') + r('<')
-    0.upto(half - 1) { res += r('+') }
-    res += r('>') + r(']') + r('<') + r('.')
-    return res if len < 2
-    1.upto(len-1) {|i|
-        diff = buffer[i] - buffer[i-1]
-        (0 < diff) ? diff.downto(1) { res += r('+') } : diff.abs.downto(0) { res += r('-') }
-        res += r('.')
-    }
-    return res
-    
+  res = ''
+  len = buffer.length
+  exit if len < 1
+  half = buffer[0] / 2
+  res += r('+')  if buffer[0] % 2
+  res += r('>') + r('[') + r('<')
+  0.upto(half - 1) { res += r('+') }
+  res += r('>') + r(']') + r('<') + r('.')
+  return res if len < 2
+  1.upto(len-1) {|i|
+    diff = buffer[i] - buffer[i-1]
+    (0 < diff) ? diff.downto(1) { res += r('+') } : diff.abs.downto(0) { res += r('-') }
+    res += r('.')
+  }
+  return res
 end
 """ 
 
