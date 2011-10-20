@@ -30,6 +30,8 @@ def r(mark)
   kq[mark] + sep 
 end
 
+
+
 # local
 def local(buffer)
   exit if buffer.size < 1
@@ -38,17 +40,19 @@ end
 
 # express
 def express(buffer)
-  res = ''
-  len = buffer.length
-  exit if len < 1
-  0.upto(buffer[0] - 1) { res += r('+') }
-  res += r('.')
-  return res if len < 2
-  1.upto(len-1) {|i|
+  exit if buffer.size < 1
+
+  res = r('+') * buffer[0] + r('.')
+  return res if buffer.size < 2
+  
+  buffer.each_index do |i|
+    next if i == 0
     diff = buffer[i] - buffer[i-1]
-    (0 < diff) ? diff.downto(1) { res += r('+') } : diff.abs.downto(1) { res += r('-') }
+    operator = (0 < diff) ? r('+') : r('-')
+    res += operator * diff.abs
     res += r('.')
-  }
+  end
+  
   return res
 end
 
@@ -81,7 +85,7 @@ end
 if __FILE__ == $0
   while line = gets
     exit if (/exit/ =~ line)
-    p local(line.to_buffer)
+    p express(line.to_buffer)
   end
   #p local(buffer)
   #p express(buffer)
