@@ -3,84 +3,71 @@
 # 
 # # Programming Language KQ Reverse Compiler
 
-# define kq
-def r(mark)
+class Kqlg
+  def _add(mark)
     kq = {
-        '>' => 'ﾀﾞｧｲｪｽ',
-        '<' => 'ｲｪｽﾀﾞｧ',
-        '+' => 'ﾀﾞｧﾀﾞｧ',
-        '-' => 'ｼｴﾘｼｴﾘ',
-        ',' => 'ﾀﾞｧｼｴﾘ',
-        '.' => 'ｼｴﾘﾀﾞｧ', # print
-        '[' => 'ｼｴﾘｲｪｽ',
-        ']' => 'ｲｪｽｼｴﾘ',
+      '>' => 'ﾀﾞｧｲｪｽ',
+      '<' => 'ｲｪｽﾀﾞｧ',
+      '+' => 'ﾀﾞｧﾀﾞｧ',
+      '-' => 'ｼｴﾘｼｴﾘ',
+      ',' => 'ﾀﾞｧｼｴﾘ',
+      '.' => 'ｼｴﾘﾀﾞｧ', # print
+      '[' => 'ｼｴﾘｲｪｽ',
+      ']' => 'ｲｪｽｼｴﾘ',
     }
-    sep = '!' * (rand(2) + 1)
-    kq[mark] + sep 
-end 
+    kq[mark] + '!' * (rand(2) + 1)
+  end 
 
-# get string 
-input = STDIN.readlines.join.chomp.force_encoding('UTF-8')
-buffer = []
-input.each_byte{|c| buffer.push(c)}
+  def initialize(input)
+    input = input.chomp.force_encoding('UTF-8')
+    @buffer = input.unpack("C*")
+  end
 
-# local
-def local(buffer)
-    res = ''
-    len = buffer.length
-    exit if len < 1
-    0.upto(len-1) {|i|
-        0.upto(buffer[i] - 1) { res += r('+') }
-        res += r('.')
-        res += r('>') if i < (len - 1)
-    }
-    return res
-end
+  # local
+  def local()
+    exit if @buffer.empty?
+    @buffer.map{|elem| (_add('+')*elem) + _add('.')}.join(_add('>'))
+  end
 
-# express
-def express(buffer)
-    res = ''
-    len = buffer.length
-    exit if len < 1
-    0.upto(buffer[0] - 1) { res += r('+') }
-    res += r('.')
-    return res if len < 2
-    1.upto(len-1) {|i|
-        diff = buffer[i] - buffer[i-1]
-        (0 < diff) ? diff.downto(1) { res += r('+') } : diff.abs.downto(1) { res += r('-') }
-        res += r('.')
-    }
-    return res
-end
+  # express
+  def express()
+    exit if @buffer.empty?
+    res = _add('+') * @buffer[0] + _add('.')
+    return res if @buffer.size < 2
+  
+    @buffer.each_index do |i|
+      next if i == 0
+      diff = @buffer[i] - @buffer[i-1]
+      operator = (0 < diff) ? _add('+') : _add('-')
+      res << operator * diff.abs
+      res << _add('.')
+    end
+    res
+  end
 
-
-# limited_express
-""" just idea now implementing
-def limited_express(buffer)
-    res = ''
-    len = buffer.length
-    exit if len < 1
-    half = buffer[0] / 2
-    res += r('+')  if buffer[0] % 2
-    res += r('>') + r('[') + r('<')
-    0.upto(half - 1) { res += r('+') }
-    res += r('>') + r(']') + r('<') + r('.')
-    return res if len < 2
-    1.upto(len-1) {|i|
-        diff = buffer[i] - buffer[i-1]
-        (0 < diff) ? diff.downto(1) { res += r('+') } : diff.abs.downto(0) { res += r('-') }
-        res += r('.')
+  # limited_express
+  """
+  def limited_express()
+    exit if @buffer.empty?
+  
+    half = @buffer[0] / 2
+    res = _add('+') if (@buffer[0] % 2).zero?
+    res ||= _add('>') + _add('[') + ('<')
+    res << _add('+') * half
+    res = _add('>') + _add(']') + _add('<') + _add('.')
+    return res if @buffer.size < 2
+  
+    @buffer.each_index{|i|
+      next if i == 0
+      diff = @buffer[i] - @buffer[i - 1]
+      operator = (0 < diff) ? _add('+'): _add('-')
+      res << operator * diff.abs
+      res << _add('.')
     }
     return res
-    
+  end
+  """
+  # TODO : more short 
+  # Green Limited Express
+  # wing
 end
-""" 
-#p local(buffer)
-p express(buffer)
-#p limited_express(buffer)
-
-
-# TODO : より短く 
-# limited express
-# Green Limited Express
-# wing

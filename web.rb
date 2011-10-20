@@ -7,15 +7,15 @@ require 'erb'
 get '/' do
     erb :index, :locals => {:text =>'Hello KQ Language', :kql => false}
 end
-require './kqrc'
+require './kqlg'
 post '/' do
-    buffer = init(params['text'])
+    kq = Kqlg.new(params['text'])
     method = params['type']
     case method
     when 'local'
-        kql = local(buffer)
+        kql = kq.local()
     when 'express'
-        kql = express(buffer)
+        kql = kq.express()
     end
     erb :index, :locals => {:text => params['text'], :kql => kql}
 end
