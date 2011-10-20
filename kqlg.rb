@@ -19,10 +19,16 @@ def r(mark)
     kq[mark] + sep 
 end 
 
-# get string 
-input = STDIN.readlines.join.chomp.force_encoding('UTF-8')
-buffer = []
-input.each_byte{|c| buffer.push(c)}
+# get string
+# String#force_encoding is added in Ruby 1.9
+class String
+  def to_buffer
+    self.chomp.force_encoding('UTF-8').each_byte.to_a
+  rescue NoMethodError
+    p "Please use 1.9.x"
+    exit
+  end
+end
 
 # local
 def local(buffer)
@@ -75,12 +81,18 @@ def limited_express(buffer)
     
 end
 """ 
-#p local(buffer)
-p express(buffer)
-#p limited_express(buffer)
-
 
 # TODO : より短く 
 # limited express
 # Green Limited Express
 # wing
+if __FILE__ == $0
+  while line = gets
+    exit if (/exit/ =~ line)
+    p local(line.to_buffer)
+  end
+  #p local(buffer)
+  #p express(buffer)
+  #p limited_express(buffer)
+end
+
