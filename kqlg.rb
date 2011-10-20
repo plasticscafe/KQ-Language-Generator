@@ -3,6 +3,17 @@
 # 
 # # Programming Language KQ Reverse Compiler
 
+# get string
+# String#force_encoding is added in Ruby 1.9
+class String
+  def to_buffer
+    self.chomp.force_encoding('UTF-8').each_byte.to_a
+  rescue NoMethodError
+    p "Please use 1.9.x"
+    exit
+  end
+end
+
 # define kq
 def r(mark)
     kq = {
@@ -17,17 +28,6 @@ def r(mark)
     }
     sep = '!' * (rand(2) + 1)
     kq[mark] + sep 
-end 
-
-# get string
-# String#force_encoding is added in Ruby 1.9
-class String
-  def to_buffer
-    self.chomp.force_encoding('UTF-8').each_byte.to_a
-  rescue NoMethodError
-    p "Please use 1.9.x"
-    exit
-  end
 end
 
 # local
