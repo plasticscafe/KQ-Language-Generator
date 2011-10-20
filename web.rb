@@ -7,7 +7,7 @@ require 'erb'
 get '/' do
     erb :index, :locals => {:text =>'Hello KQ Language', :kql => false}
 end
-require './kqlg'
+require 'kqlg'
 post '/' do
     kq = Kqlg.new(params['text'])
     method = params['type']
