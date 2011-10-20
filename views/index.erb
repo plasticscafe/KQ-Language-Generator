@@ -1,0 +1,94 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ja">
+	<head>
+		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+		<meta http-equiv="content-script-type" content="text/javascript" />
+		<meta http-equiv="content-style-type" content="text/css" />
+		<title>KQ Language Generator</title>
+		<link rel="stylesheet" href="http://twitter.github.com/bootstrap/1.3.0/bootstrap.min.css">
+		<style type="text/css">
+		<!--
+			body { padding-top:70px; }
+			.container { width:600px;}
+			.container textarea { width:100%; height:50px;}
+			.result textarea { height:300px;color:#333333; }
+			.container div.input { margin:10px auto; }
+			.container div.input li { height:2em;border-bottom:1px dotted #dddddd; }
+			div.button_area { text-align:right; }
+			div.button_area input { margin-left:20px; }
+			div.cite { text-align:right; }
+			div.cite ul{ list-style:none; }
+			div.footer { text-align:right; }
+		</style>
+	</head>
+	<body>
+		<div class="topbar">
+			<div class="topbar-inner">
+				<div class="container">
+					<h3>
+						<a href="/">KQ Langage Generator</a>
+					</h3>
+				</div>
+			</div>
+		</div>
+		<div class="container">
+			<form method="POST">
+				<fieldset>
+					<legend>人語からKQ言語を生成します</legend>
+					<div class="input">
+						<textarea name="text"><%= text %></textarea>
+						<span class="help-block">KQ言語に変換する文章を入力してください</span>
+					</div>
+					<div class="input">
+						<ul class="inputs-list">
+							<li>
+								<label><input type="radio" name="type" value="local" />
+								普通（単純変換なのでとても冗長）</label>
+							</li>
+							<li>
+								<label><input type="radio" name="type" value="express" checked="checked" />
+								急行（若干効率化して短めに）</label>
+							</li>
+							<li>
+								<label><input type="radio" name="type" value="limited_express" disabled="disabled"/>
+								特急（開発中：更に効率化して圧縮言語化）</label>
+							</li>
+							<li>
+								<label><input type="radio" name="type" value="green_limited_express" disabled="disabled"/>
+								快特（検討中：理想的な効率化をした言語変換）</label>
+							</li>
+							<li>
+								<label><input type="radio" name="type" value="wing" disabled="disabled"/>
+								Wing（募集中：神、ダァシエリイェス）</label>
+							</li>
+						</ul>
+					</div>
+					<div class="input button_area">
+						<input type="reset" value="リセット" class="btn"/>
+						<input type="submit" value="生成" class="btn"/>
+					</div>
+				</fieldset>
+			</form>
+			<% if kql %>
+			<div class="result alert-message block-message info">
+				<h4>Created KQ Langage</h4> 
+				<textarea><%= kql %></textarea>
+			</div>
+			<% end %>
+			<div class="cite">
+				<h4>参考</h4>
+				<ul>
+					<li><a href="http://ideone.com/DDWfy" target="_blank">KQ Language</a> by <a href="http://twitter.com/nvsofts" target="_blank">@nvsofts</a></li>
+					<li><a href="http://lyia.net/kq.php" target="_blank">KQ Language Executive System</a> by <a href="http://twitter.com/lyiase" target="_blank">@lyiase</a></li>
+				</ul>
+			</div>
+			<div class="footer well">
+				<h5 class="copyright">
+					KQLG created by <a href="http://twitter.com/plasticscafe">plasticscafe</a>
+				</h5>
+			</div>
+		</div>
+	</body>
+</html>
+
