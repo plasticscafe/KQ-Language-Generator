@@ -34,13 +34,13 @@ end
 
 # local
 def local(buffer)
-  exit if buffer.size < 1
+  exit if buffer.empty?
   buffer.map{|elem| (r('+')*elem) + r('.')}.join(r('>'))
 end
 
 # express
 def express(buffer)
-  exit if buffer.size < 1
+  exit if buffer.empty?
 
   res = r('+') * buffer[0] + r('.')
   return res if buffer.size < 2
@@ -49,22 +49,40 @@ def express(buffer)
     next if i == 0
     diff = buffer[i] - buffer[i-1]
     operator = (0 < diff) ? r('+') : r('-')
-    res += operator * diff.abs
-    res += r('.')
+    res << operator * diff.abs
+    res << r('.')
   end
   
   return res
 end
 
-
-# limited_express
 """ just idea now implementing
+# limited_express
 def limited_express(buffer)
+  exit if buffer.size
+  
+  half = buffer[0] / 2
+  res = r('+') if (buffer[0] % 2).zero?
+  res ||= r('>') + r('[') + ('<')
+  res << r('+') * half
+  res = r('>') + r(']') + r('<') + r('.')
+  return res if buffer.size < 2
+  
+  buffer.each_index{|i|
+    next if i == 0
+    diff = buffer[i] - buffer[i - 1]
+    operator = (0 < diff) ? r('+'): r('-')
+    res << operator * diff.abs
+    res << r('.')
+  }
+  return res
+
+  // origin idea
   res = ''
   len = buffer.length
   exit if len < 1
   half = buffer[0] / 2
-  res += r('+')  if buffer[0] % 2
+  res += r('+')  if buffer[0] % 2 #= never false this code. 'couse In ruby 0 is true.
   res += r('>') + r('[') + r('<')
   0.upto(half - 1) { res += r('+') }
   res += r('>') + r(']') + r('<') + r('.')
@@ -75,6 +93,7 @@ def limited_express(buffer)
     res += r('.')
   }
   return res
+  // end of origin idea
 end
 """ 
 
