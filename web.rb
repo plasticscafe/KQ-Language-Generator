@@ -4,18 +4,18 @@
 #
 require 'sinatra'
 require 'erb'
-get '/' do
-    erb :index, :locals => {:text =>'Hello KQ Language', :kql => false}
-end
+
 require './kqlg'
+
+get '/' do
+    erb :index, :locals => {:pre_text => 'Hello KQ Language', :text => '', :kql => false}
+end
+
 post '/' do
     kq = Kqlg.new(params['text'])
-    method = params['type']
-    case method
-    when 'local'
-        kql = kq.local()
-    when 'express'
-        kql = kq.express()
-    end
-    erb :index, :locals => {:text => params['text'], :kql => kql}
+    kql = kq.send(params['type'].to_sym)
+
+    # TODO flash message or if kql.nil?
+    
+    erb :index, :locals => {:pre_text => 'Hello KQ Language', :text => params['text'], :kql => kql}
 end

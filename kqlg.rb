@@ -18,19 +18,19 @@ class Kqlg
   end 
 
   def initialize(input)
-    input = input.chomp.force_encoding('UTF-8')
-    @buffer = input.unpack("C*")
+    @buffer = input.chomp.force_encoding('UTF-8').unpack("C*")
   end
 
   # local
   def local()
-    exit if @buffer.empty?
+    return nil if @buffer.empty?
     @buffer.map{|elem| (_add('+')*elem) + _add('.')}.join(_add('>'))
   end
 
   # express
   def express()
-    exit if @buffer.empty?
+    return nil if @buffer.empty?
+
     res = _add('+') * @buffer[0] + _add('.')
     return res if @buffer.size < 2
   
@@ -47,13 +47,13 @@ class Kqlg
   # limited_express
   """
   def limited_express()
-    exit if @buffer.empty?
+    return nil if @buffer.empty?
   
     half = @buffer[0] / 2
     res = _add('+') if (@buffer[0] % 2).zero?
     res ||= _add('>') + _add('[') + ('<')
     res << _add('+') * half
-    res = _add('>') + _add(']') + _add('<') + _add('.')
+    res += _add('>') + _add(']') + _add('<') + _add('.')
     return res if @buffer.size < 2
   
     @buffer.each_index{|i|

@@ -7,6 +7,9 @@
 		<meta http-equiv="content-style-type" content="text/css" />
 		<title>KQ Language Generator</title>
 		<link rel="stylesheet" href="http://twitter.github.com/bootstrap/1.3.0/bootstrap.min.css">
+		<!--[if it IE 9]]>
+			<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+		<![endif]-->
 		<style type="text/css">
 		<!--
 			body { padding-top:70px; }
@@ -37,7 +40,7 @@
 				<fieldset>
 					<legend>人語からKQ言語を生成します</legend>
 					<div class="input">
-						<textarea name="text"><%= text %></textarea>
+						<textarea name="text" placeholder="<%= pre_text %>"><%= text %></textarea>
 						<span class="help-block">KQ言語に変換する文章を入力してください</span>
 					</div>
 					<div class="input">
