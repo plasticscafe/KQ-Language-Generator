@@ -21,6 +21,10 @@ class Kqlg
     @buffer = input.chomp.force_encoding('UTF-8').unpack("C*")
   end
 
+  # --
+  # under in these action methods, return nil when error occurred
+  # --
+
   # local
   def local()
     return nil if @buffer.empty?
@@ -66,10 +70,14 @@ class Kqlg
     return res
   end
   """
+
+  # when called unimplemented method, 
+  # this method work to return nil.
+  def method_missing(method, *args)
+    nil
+  end
+
   # TODO : more short 
   # Green Limited Express
   # wing
-  def method_missing(name, *args)
-    nil
-  end
 end
