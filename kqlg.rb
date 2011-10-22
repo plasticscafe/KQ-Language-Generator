@@ -69,4 +69,7 @@ class Kqlg
   # TODO : more short 
   # Green Limited Express
   # wing
+  def method_missing(name, *args)
+    nil
+  end
 end
